@@ -1,0 +1,13 @@
+{
+  "name": "litedb",
+  "version": "1.0.0",
+  "description": "Storage utility for browser",
+  "main": "./lib/index.js",
+  "preferGlobal": false,
+  "scripts": {
+    "build": "tsc && rollup -c"
+  },
+  "keywords": ["litedb", "lightdb"],
+  "author": "Rajat Sharma <rajat.prototype@gmail.com> (https://github.com/rajatprototype)",
+  "license": "ISC"
+}

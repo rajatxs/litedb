@@ -1,0 +1,189 @@
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global = global || self, global.LiteDB = factory());
+}(this, (function () { 'use strict';
+
+    class LDBio {
+        /**
+         * Read object from localStorage
+         * @public
+         * @param {string} key - Document access key
+         * @returns {object}
+         */
+        read(key) {
+            return JSON.parse(localStorage.getItem(key));
+        }
+        /**
+         * Write object value into localStorage
+         * @public
+         * @param {string} key - Document ID
+         * @param {object} payload - Object value
+         * @returns {string}
+         */
+        write(key, payload) {
+            localStorage.setItem(key, JSON.stringify(payload));
+            return key;
+        }
+        /**
+         * Remove the document
+         * @param {string} key - Document ID
+         * @returns {string}
+         */
+        delete(key) {
+            localStorage.removeItem(key);
+            return key;
+        }
+    }
+
+    class LDBDocument extends LDBio {
+        /**
+         * Inititate document
+         * @param {string} docid - Document ID
+         * @param {LDBCollectionMetadata} coll - Collection metadata
+         */
+        constructor(docid, coll) {
+            super();
+            const { collid, collname } = coll;
+            this.metadata = {
+                collid,
+                collname,
+                docid,
+                dockey: `${collid}-${docid}` // Combine key
+            };
+        }
+        /**
+         * Existence of document in storage
+         * @type {boolean}
+         */
+        get exists() {
+            return localStorage.getItem(this.metadata.dockey) ? true : false;
+        }
+        /**
+         * Get document object
+         * @returns {object}
+         */
+        get() {
+            return this.read(this.metadata.dockey) || null;
+        }
+        /**
+         * Add or update document
+         * @param {object} payload - Document payload
+         * @returns {string}
+         */
+        set(payload) {
+            return this.write(this.metadata.dockey, payload);
+        }
+        /**
+         * Remove the document
+         * @returns {string}
+         */
+        remove() {
+            this.delete(this.metadata.dockey);
+            return this.metadata.dockey;
+        }
+    }
+
+    /**
+     * Extract keys from localStorage
+     * @param {string} pattern - String pattern
+     */
+    const getEntries = (pattern) => {
+        const keylist = Object.getOwnPropertyNames(localStorage); // All keys
+        return keylist.filter(key => key.includes(pattern));
+    };
+
+    class LDBCollection {
+        /**
+         * @constructor
+         * @param {string} collname - Collection name
+         * @returns {Collection}
+         */
+        constructor(collname) {
+            this.metadata = {
+                collid: `ldb:coll-${collname}`,
+                collname
+            };
+        }
+        /**
+         * Refer to document
+         * @param {string} docid - Document ID
+         * @returns {LiteDBDocumentInstance}
+         */
+        doc(docid = String(Date.now())) {
+            if (docid.includes('-')) {
+                throw new Error("Use '_' character instead of hyphen");
+            }
+            return new LDBDocument(docid, {
+                collid: this.metadata.collid,
+                collname: this.metadata.collname
+            });
+        }
+        /**
+         * Instance of documents
+         * @returns {Array<LiteDBDocumentInstance>}
+         */
+        get docs() {
+            return this.docnames.map(docname => this.doc(docname));
+        }
+        /**
+         * Storage access keys related to collection
+         * @type {Array<string>}
+         */
+        get entries() {
+            return getEntries(this.metadata.collid);
+        }
+        /**
+         * Document list
+         * @type {Array<string>}
+         */
+        get docnames() {
+            return this.entries.map(key => key.split(/\-/)[2]);
+        }
+        /**
+         * @type {number}
+         * @description Total number of documents
+         */
+        get length() {
+            return this.entries.length;
+        }
+    }
+
+    /**
+     * Core utility
+     * @class
+     * @version 1.0.0
+     * @implements {LiteDBInterface}
+     */
+    class LiteDB {
+        /**
+         * Reference of db collection
+         * @static
+         * @param {string} collname - Collection name
+         * @returns {LiteDBOperations}
+         */
+        static collection(collname) {
+            return new LDBCollection(collname);
+        }
+        /**
+         * Collections entries
+         * @public
+         * @returns {Array<string>}
+         */
+        static get entries() {
+            return getEntries('ldb:coll');
+        }
+        /**
+         * Package version
+         * @public
+         * @static
+         * @returns {string}
+         */
+        static get version() {
+            return '1.0.0';
+        }
+    }
+
+    return LiteDB;
+
+})));

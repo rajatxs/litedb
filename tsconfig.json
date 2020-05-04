@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "./lib",
+    "allowJs": true,
+    "target": "ES6",
+    "esModuleInterop": true,
+    "removeComments": false
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
