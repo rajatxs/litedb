@@ -156,6 +156,53 @@
         }
     }
 
+    class LDBKey {
+        /**
+         * @public
+         * @constructor
+         * @param {string} keyname - Reference key
+         */
+        constructor(keyname) {
+            this.keyname = keyname;
+        }
+        /**
+         * LiteDB key
+         * @type {string}
+         */
+        get key() {
+            return `ldb:key-${this.keyname}`;
+        }
+        /**
+         * Value of reference key
+         * @type {string}
+         */
+        get val() {
+            return localStorage.getItem(this.key) || null;
+        }
+        /**
+         * Existence of key
+         * @type {boolean}
+         */
+        get has() {
+            return this.val ? true : false;
+        }
+        /**
+         * Set new value
+         * @param {string} val - New value
+         */
+        set val(val) {
+            localStorage.setItem(this.key, val.toString());
+        }
+        /**
+         * Remove key from localStorage
+         * @returns {string}
+         */
+        remove() {
+            localStorage.removeItem(this.key);
+            return this.keyname;
+        }
+    }
+
     /**
      * Core utility
      * @class
@@ -178,6 +225,41 @@
          */
         static get entries() {
             return getEntries('ldb:coll');
+        }
+        /**
+         * Inititate key instance
+         * @param {string} id
+         * @returns {LiteDBKeyInstance}
+         */
+        static key(id) {
+            return new LDBKey(id);
+        }
+        /**
+         * List of keys
+         * @public
+         * @static
+         * @returns {Array<string>}
+         */
+        static get keys() {
+            return getEntries('ldb:key');
+        }
+        /**
+         * Extracted part of keys
+         * @public
+         * @static
+         * @returns {Array<string>}
+         */
+        static get keynames() {
+            return this.keys.map(key => key.split(/\-/)[1]);
+        }
+        /**
+         * Remove all keys from entry
+         * @public
+         * @static
+         * @returns {Array<string>}
+         */
+        static removeAllKeys() {
+            return this.keynames.map(key => this.key(key).remove());
         }
         /**
          * Package version

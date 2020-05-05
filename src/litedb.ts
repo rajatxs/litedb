@@ -1,5 +1,7 @@
 import LDBCollection from './collection'
 import { getEntries } from './utils'
+import LDBKey from './key'
+import { LiteDBKeyInstance } from './interfaces'
 
 /**
  * Core utility
@@ -25,6 +27,45 @@ class LiteDB {
    */
   public static get entries(): Array<string> {
     return getEntries('ldb:coll')
+  }
+
+  /**
+   * Inititate key instance
+   * @param {string} id
+   * @returns {LiteDBKeyInstance}
+   */
+  public static key(id: string) : LiteDBKeyInstance {
+    return new LDBKey(id)
+  }
+
+  /**
+   * List of keys
+   * @public
+   * @static
+   * @returns {Array<string>}
+   */
+  public static get keys(): Array<string> {
+    return getEntries('ldb:key')
+  }
+
+  /**
+   * Extracted part of keys
+   * @public
+   * @static
+   * @returns {Array<string>}
+   */
+  public static get keynames(): Array<string> {
+    return this.keys.map(key => key.split(/\-/)[1])
+  }
+
+  /**
+   * Remove all keys from entry
+   * @public
+   * @static
+   * @returns {Array<string>}
+   */
+  public static removeAllKeys(): Array<string> {
+    return this.keynames.map(key => this.key(key).remove())
   }
 
   /**

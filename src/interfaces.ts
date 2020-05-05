@@ -35,3 +35,13 @@ export interface LiteDBDocumentInstance {
   set(payload: object): string
   remove(): string
 }
+
+/** @interface LiteDBKeyInstance */
+export interface LiteDBKeyInstance {
+  keyname: string
+
+  key: string
+  val: string
+  has: boolean
+  remove(): string
+}
