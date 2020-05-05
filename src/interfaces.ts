@@ -19,9 +19,9 @@ export interface LiteDBCollectionInstance {
 
   doc(docid: string): LiteDBDocumentInstance
 
+  docs: Array<LiteDBDocumentInstance>
   entries: Array<string>
   docnames: Array<string>
-  docs: Array<LiteDBDocumentInstance>
   length: number
 }
 

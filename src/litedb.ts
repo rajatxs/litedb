@@ -1,4 +1,3 @@
-
 import LDBCollection from './collection'
 import { getEntries } from './utils'
 
@@ -6,14 +5,13 @@ import { getEntries } from './utils'
  * Core utility
  * @class
  * @version 1.0.0
- * @implements {LiteDBInterface}
  */
 class LiteDB {
+
   /**
    * Reference of db collection
    * @static
    * @param {string} collname - Collection name
-   * @returns {LiteDBOperations}
    */
   public static collection(collname: string) {
     return new LDBCollection(collname)
@@ -22,6 +20,7 @@ class LiteDB {
   /**
    * Collections entries
    * @public
+   * @static
    * @returns {Array<string>}
    */
   public static get entries(): Array<string> {

@@ -9,12 +9,11 @@ class LDBCollection implements LiteDBCollectionInstance {
   /**
    * @type {LDBCollectionMetadata}
    */
-  metadata: LDBCollectionMetadata
+  public metadata: LDBCollectionMetadata
 
   /**
    * @constructor
    * @param {string} collname - Collection name
-   * @returns {Collection}
    */
   public constructor(collname: string) {
     this.metadata = {
@@ -63,8 +62,8 @@ class LDBCollection implements LiteDBCollectionInstance {
   }
 
   /**
+   * Total number of documents
    * @type {number}
-   * @description Total number of documents
    */
   public get length(): number {
     return this.entries.length
