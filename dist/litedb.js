@@ -149,10 +149,17 @@
         }
         /**
          * Total number of documents
+         * @returns {number}
+         */
+        count() {
+            return this.entries.length;
+        }
+        /**
+         * Alias for count method
          * @type {number}
          */
         get length() {
-            return this.entries.length;
+            return this.count();
         }
     }
 

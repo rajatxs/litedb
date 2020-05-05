@@ -71,11 +71,20 @@ class LDBCollection implements LiteDBCollectionInstance {
 
   /**
    * Total number of documents
+   * @returns {number}
+   */
+  public count(): number {
+    return this.entries.length
+  }
+
+  /**
+   * Alias for count method
    * @type {number}
    */
   public get length(): number {
-    return this.entries.length
+    return this.count()
   }
+
 }
 
 export default LDBCollection
