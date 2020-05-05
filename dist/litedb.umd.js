@@ -1,5 +1,8 @@
-var LiteDB = (function () {
-    'use strict';
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global = global || self, global.LiteDB = factory());
+}(this, (function () { 'use strict';
 
     class LDBio {
         /**
@@ -278,4 +281,4 @@ var LiteDB = (function () {
 
     return LiteDB;
 
-}());
+})));
