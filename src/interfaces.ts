@@ -19,6 +19,8 @@ export interface LiteDBCollectionInstance {
 
   doc(docid: string): LiteDBDocumentInstance
 
+  removeAll(): Array<string>
+
   docs: Array<LiteDBDocumentInstance>
   entries: Array<string>
   docnames: Array<string>

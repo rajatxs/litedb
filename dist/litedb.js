@@ -87,6 +87,7 @@
     /**
      * Extract keys from localStorage
      * @param {string} pattern - String pattern
+     * @returns {Array<string>}
      */
     const getEntries = (pattern) => {
         const keylist = Object.getOwnPropertyNames(localStorage); // All keys
@@ -97,7 +98,6 @@
         /**
          * @constructor
          * @param {string} collname - Collection name
-         * @returns {Collection}
          */
         constructor(collname) {
             this.metadata = {
@@ -118,6 +118,13 @@
                 collid: this.metadata.collid,
                 collname: this.metadata.collname
             });
+        }
+        /**
+         * Remove all documents from collection
+         * @returns {Array<string>}
+         */
+        removeAll() {
+            return this.docs.map(doc => doc.remove());
         }
         /**
          * Instance of documents
@@ -141,8 +148,8 @@
             return this.entries.map(key => key.split(/\-/)[2]);
         }
         /**
+         * Total number of documents
          * @type {number}
-         * @description Total number of documents
          */
         get length() {
             return this.entries.length;
@@ -153,14 +160,12 @@
      * Core utility
      * @class
      * @version 1.0.0
-     * @implements {LiteDBInterface}
      */
     class LiteDB {
         /**
          * Reference of db collection
          * @static
          * @param {string} collname - Collection name
-         * @returns {LiteDBOperations}
          */
         static collection(collname) {
             return new LDBCollection(collname);
@@ -168,6 +173,7 @@
         /**
          * Collections entries
          * @public
+         * @static
          * @returns {Array<string>}
          */
         static get entries() {

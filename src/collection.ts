@@ -38,6 +38,14 @@ class LDBCollection implements LiteDBCollectionInstance {
   }
 
   /**
+   * Remove all documents from collection
+   * @returns {Array<string>}
+   */
+  removeAll(): Array<string> {
+    return this.docs.map(doc => doc.remove())
+  }
+
+  /**
    * Instance of documents
    * @returns {Array<LiteDBDocumentInstance>}
    */
