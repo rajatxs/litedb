@@ -36,6 +36,9 @@ class LDBCollection implements LiteDBCollectionInstance {
    * @returns {LiteDBDocumentInstance}
    */
   public doc(docid: string = String(Date.now())): LiteDBDocumentInstance {
+    // Convert numeric value
+    docid = docid.toString()
+
     if (docid.includes('-')) {
       throw new Error("Use '_' character instead of hyphen")
     }

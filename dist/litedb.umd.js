@@ -144,6 +144,8 @@
          * @returns {LiteDBDocumentInstance}
          */
         doc(docid = String(Date.now())) {
+            // Convert numeric value
+            docid = docid.toString();
             if (docid.includes('-')) {
                 throw new Error("Use '_' character instead of hyphen");
             }
