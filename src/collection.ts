@@ -63,7 +63,25 @@ class LDBCollection implements LiteDBCollectionInstance {
   public get docs(): Array<LiteDBDocumentInstance> {
     return this.docnames.map(docname => this.doc(docname))  
   }
+
+  /**
+   * Skip documents
+   * @param {range} range - Skip range
+   * @returns {Array<LiteDBDocumentInstance>}
+   */
+  public skip(range: number): Array<LiteDBDocumentInstance> {
+    return this.docnames.slice(range).map(docname => this.doc(docname))
+  }
   
+  /**
+   * Limitation of document array
+   * @param {number} range - Document limit number
+   * @returns {Array<LiteDBDocumentInstance>}
+   */
+  public limit(range: number): Array<LiteDBDocumentInstance> {
+    return this.docnames.slice(0, range).map(docname => this.doc(docname))
+  }
+
   /**
    * Storage access keys related to collection
    * @type {Array<string>}
@@ -79,6 +97,7 @@ class LDBCollection implements LiteDBCollectionInstance {
   public get docnames(): Array<string> {
     return this.entries.map(key => key.split(/\-/)[2])
   }
+
 
   /**
    * Total number of documents

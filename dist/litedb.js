@@ -166,6 +166,22 @@ var LiteDB = (function () {
             return this.docnames.map(docname => this.doc(docname));
         }
         /**
+         * Skip documents
+         * @param {range} range - Skip range
+         * @returns {Array<LiteDBDocumentInstance>}
+         */
+        skip(range) {
+            return this.docnames.slice(range).map(docname => this.doc(docname));
+        }
+        /**
+         * Limitation of document array
+         * @param {number} range - Document limit number
+         * @returns {Array<LiteDBDocumentInstance>}
+         */
+        limit(range) {
+            return this.docnames.slice(0, range).map(docname => this.doc(docname));
+        }
+        /**
          * Storage access keys related to collection
          * @type {Array<string>}
          */

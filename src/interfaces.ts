@@ -23,6 +23,8 @@ export interface LiteDBCollectionInstance {
   removeAll(): Array<string>
 
   docs: Array<LiteDBDocumentInstance>
+  skip(range: number): Array<LiteDBDocumentInstance>
+  limit(range: number): Array<LiteDBDocumentInstance>
   entries: Array<string>
   docnames: Array<string>
   length: number
