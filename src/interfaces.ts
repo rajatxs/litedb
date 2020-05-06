@@ -16,6 +16,7 @@ export interface LDBDocumentMetadata {
 /** @interface LiteDBCollectionInstance */
 export interface LiteDBCollectionInstance {
   metadata: LDBCollectionMetadata
+  name: string
 
   doc(docid: string): LiteDBDocumentInstance
 
@@ -30,10 +31,14 @@ export interface LiteDBCollectionInstance {
 /** @interface LiteDBDocumentInstance */
 export interface LiteDBDocumentInstance {
   metadata: LDBDocumentMetadata
+  name: string
   exists: boolean
+  keys: Array<string>
   get(): object
   set(payload: object): string
   remove(): string
+  toString(): string
+  valueOf(): object
 }
 
 /** @interface LiteDBKeyInstance */

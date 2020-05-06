@@ -10,6 +10,12 @@ class LDBDocument extends LDBio implements LiteDBDocumentInstance {
    */
   metadata: LDBDocumentMetadata
 
+  /** 
+   * Instance name
+   * @type {string}
+   */
+  public name: string
+
   /**
    * Inititate document
    * @param {string} docid - Document ID
@@ -18,6 +24,8 @@ class LDBDocument extends LDBio implements LiteDBDocumentInstance {
   constructor(docid: string, coll: LDBCollectionMetadata) {
     super()
     const { collid, collname } = coll
+
+    this.name = docid
 
     this.metadata = {
       collid,
@@ -33,6 +41,14 @@ class LDBDocument extends LDBio implements LiteDBDocumentInstance {
    */
   get exists(): boolean {
     return localStorage.getItem(this.metadata.dockey)? true: false
+  }
+
+  /**
+   * Document keys
+   * @type {Array<string>}
+   */
+  get keys(): Array<string> {
+    return Object.keys(this.get())
   }
 
   /**
@@ -59,6 +75,33 @@ class LDBDocument extends LDBio implements LiteDBDocumentInstance {
   public remove(): string {
     this.delete(this.metadata.dockey)
     return this.metadata.dockey
+  }
+
+  /**
+   * Merge new payload
+   * @param {object} mixpayload - Payload
+   * @returns {string} 
+   */
+  public merge(mixpayload: object): string {
+    return this.set(Object.assign(this.get(), mixpayload))
+  }
+
+  /**
+   * Stringify object payload
+   * @override 
+   * @returns {string}
+   */
+  public toString(): string {
+    return JSON.stringify(this.get())
+  }
+
+  /**
+   * Alias for get() method
+   * @override
+   * @returns {object}
+   */
+  public valueOf(): object {
+    return this.get()
   }
 }
 

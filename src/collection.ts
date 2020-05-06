@@ -12,10 +12,18 @@ class LDBCollection implements LiteDBCollectionInstance {
   public metadata: LDBCollectionMetadata
 
   /**
+   * Instance name
+   * @type {string}
+   */
+  public name: string
+
+  /**
    * @constructor
    * @param {string} collname - Collection name
    */
   public constructor(collname: string) {
+    this.name = collname
+
     this.metadata = {
       collid: `ldb:coll-${collname}`,
       collname

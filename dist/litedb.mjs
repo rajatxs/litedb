@@ -39,6 +39,7 @@ class LDBDocument extends LDBio {
     constructor(docid, coll) {
         super();
         const { collid, collname } = coll;
+        this.name = docid;
         this.metadata = {
             collid,
             collname,
@@ -52,6 +53,13 @@ class LDBDocument extends LDBio {
      */
     get exists() {
         return localStorage.getItem(this.metadata.dockey) ? true : false;
+    }
+    /**
+     * Document keys
+     * @type {Array<string>}
+     */
+    get keys() {
+        return Object.keys(this.get());
     }
     /**
      * Get document object
@@ -76,6 +84,30 @@ class LDBDocument extends LDBio {
         this.delete(this.metadata.dockey);
         return this.metadata.dockey;
     }
+    /**
+     * Merge new payload
+     * @param {object} mixpayload - Payload
+     * @returns {string}
+     */
+    merge(mixpayload) {
+        return this.set(Object.assign(this.get(), mixpayload));
+    }
+    /**
+     * Stringify object payload
+     * @override
+     * @returns {string}
+     */
+    toString() {
+        return JSON.stringify(this.get());
+    }
+    /**
+     * Alias for get() method
+     * @override
+     * @returns {object}
+     */
+    valueOf() {
+        return this.get();
+    }
 }
 
 /**
@@ -94,6 +126,7 @@ class LDBCollection {
      * @param {string} collname - Collection name
      */
     constructor(collname) {
+        this.name = collname;
         this.metadata = {
             collid: `ldb:coll-${collname}`,
             collname
