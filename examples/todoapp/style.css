@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
+
+body {
+  --pcolor: royalblue;
+  --fcolor: white;
+
+  --fr-color: #444;
+
+  --fontface: 'Nunito', 'Comfortaa', Verdana, Helvetica, sans-serif;
+}
+
+body {
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--pcolor);
+  font-family: var(--fontface);
+  user-select: none;
+}
+button.action {
+  padding: 4px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 4px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.15s linear;
+}
+button.action:hover {
+  background-color: #EEE;
+}
+button.action:hover svg {
+  stroke: var(--pcolor);
+}
+button.action svg {
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: bottom;
+  stroke: var(--fr-color);
+  fill: none;
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.text-blur {
+  color: #999;
+}
+.text-semi-blur {
+  color: #666;
+}
+#app {
+  display: flex;
+  height: inherit;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes card-enter {
+  from {
+    transform: translateY(80px) scaleX(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scaleX(1);
+    opacity: 1;
+  }
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 1em;
+  width: 26em;
+  border-radius: 8px;
+  background-color: var(--fcolor);
+  color: var(--fr-color);
+  animation-name: card-enter;
+  animation-duration: 0.6s;
+}
+.card input[type=text] {
+  padding: 8px 12px;
+  width: 90%;
+  font-size: 1.1em;
+  outline: none;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  border-radius: 8px;
+  background-color: #EEE;
+  font-family: var(--fontface);
+  transition: background-color 0.15s linear;
+  -webkit-tap-highlight-color: transparent;
+}
+.card input[type=text]:hover {
+  background-color: #DDD;
+}
+.card input[type=text]:focus {
+  background-color: transparent;
+  border-color: var(--pcolor);
+}
+.card input[type=text]::selection {
+  background-color: var(--pcolor);
+  color: var(--fcolor);
+}
+
+ul.todos {
+  padding: 12px;
+  text-align: center;
+}
+ul.todos li {
+  display: grid;
+  padding: 8px;
+  grid-template-columns: 20% 60% 20%;
+}
+ul.todos li .note {
+  text-align: left;
+}
+
+.empty-data-error {
+  padding: 1em 12px;
+}
+.empty-data-error p {
+  font-size: 1.4em;
+  color: #888;
+  text-align: center;
+}
