@@ -65,7 +65,7 @@
          * @type {Array<string>}
          */
         get keys() {
-            return Object.keys(this.get());
+            return Object.keys(this.get() || {});
         }
         /**
          * Get document object

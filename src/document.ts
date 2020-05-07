@@ -8,7 +8,7 @@ class LDBDocument extends LDBio implements LiteDBDocumentInstance {
   /**
    * @type {LDBDocumentMetadata}
    */
-  metadata: LDBDocumentMetadata
+  public metadata: LDBDocumentMetadata
 
   /** 
    * Instance name
@@ -48,7 +48,7 @@ class LDBDocument extends LDBio implements LiteDBDocumentInstance {
    * @type {Array<string>}
    */
   get keys(): Array<string> {
-    return Object.keys(this.get())
+    return Object.keys(this.get() || {})
   }
 
   /**
