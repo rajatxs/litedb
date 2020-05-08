@@ -1,7 +1,7 @@
 import LDBCollection from './collection'
 import { getEntries } from './utils'
 import LDBKey from './key'
-import { LiteDBKeyInstance } from './interfaces'
+import { LiteDBKeyInstance, LiteDBCollectionOptions } from './interfaces'
 
 /**
  * Core utility
@@ -14,9 +14,11 @@ class LiteDB {
    * Reference of db collection
    * @static
    * @param {string} collname - Collection name
+   * @param {LiteDBCollectionOptions} - Collection options
+   * @returns {LDBCollection}
    */
-  public static collection(collname: string) {
-    return new LDBCollection(collname)
+  public static collection(collname: string, collopt: LiteDBCollectionOptions) {
+    return new LDBCollection(collname, collopt)
   }
 
   /**

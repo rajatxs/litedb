@@ -1,12 +1,11 @@
 import LDBCollection from './collection';
-import { getEntries } from './utils';
-import LDBKey from './key';
+import { LiteDBKeyInstance, LiteDBCollectionOptions } from './interfaces';
 /**
  * Core utility
  * @class
  * @version 1.0.0
  */
-class LiteDB {
+declare class LiteDB {
     /**
      * Reference of db collection
      * @static
@@ -14,61 +13,47 @@ class LiteDB {
      * @param {LiteDBCollectionOptions} - Collection options
      * @returns {LDBCollection}
      */
-    static collection(collname, collopt) {
-        return new LDBCollection(collname, collopt);
-    }
+    static collection(collname: string, collopt: LiteDBCollectionOptions): LDBCollection;
     /**
      * Collections entries
      * @public
      * @static
      * @returns {Array<string>}
      */
-    static get entries() {
-        return getEntries('ldb:coll');
-    }
+    static get entries(): Array<string>;
     /**
      * Inititate key instance
      * @param {string} id
      * @returns {LiteDBKeyInstance}
      */
-    static key(id) {
-        return new LDBKey(id);
-    }
+    static key(id: string): LiteDBKeyInstance;
     /**
      * List of keys
      * @public
      * @static
      * @returns {Array<string>}
      */
-    static get keys() {
-        return getEntries('ldb:key');
-    }
+    static get keys(): Array<string>;
     /**
      * Extracted part of keys
      * @public
      * @static
      * @returns {Array<string>}
      */
-    static get keynames() {
-        return this.keys.map(key => key.split(/\-/)[1]);
-    }
+    static get keynames(): Array<string>;
     /**
      * Remove all keys from entry
      * @public
      * @static
      * @returns {Array<string>}
      */
-    static removeAllKeys() {
-        return this.keynames.map(key => this.key(key).remove());
-    }
+    static removeAllKeys(): Array<string>;
     /**
      * Package version
      * @public
      * @static
      * @returns {string}
      */
-    static get version() {
-        return '1.0.0';
-    }
+    static get version(): string;
 }
 export default LiteDB;

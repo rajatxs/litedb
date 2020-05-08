@@ -44,14 +44,9 @@
          */
         constructor(docid, coll) {
             super();
-            const { collid, collname } = coll;
             this.name = docid;
-            this.metadata = {
-                collid,
-                collname,
-                docid,
-                dockey: `${collid}-${docid}` // Combine key
-            };
+            this.metadata = Object.assign(Object.assign({}, coll), { docid, dockey: `${coll.collid}-${docid}` // Combine key
+             });
         }
         /**
          * Existence of document in storage
@@ -80,6 +75,11 @@
          * @returns {string}
          */
         set(payload) {
+            const { attachUniqueId, docid } = this.metadata;
+            if (attachUniqueId) {
+                // Assign unique id
+                Reflect.set(payload, attachUniqueId, docid);
+            }
             return this.write(this.metadata.dockey, payload);
         }
         /**
@@ -130,8 +130,10 @@
         /**
          * @constructor
          * @param {string} collname - Collection name
+         * @param {LiteDBCollectionOptions} - Collection options
          */
-        constructor(collname) {
+        constructor(collname, collopt = { unique: 'id' }) {
+            this.collopt = collopt;
             this.name = collname;
             this.metadata = {
                 collid: `ldb:coll-${collname}`,
@@ -139,19 +141,54 @@
             };
         }
         /**
+         * Generate custom id depends on optional config
+         * @returns {string}
+         */
+        generateDocumentID() {
+            let genId = null;
+            switch (this.collopt.unique) {
+                case 'id':
+                    const genLogic = this.collopt.generate;
+                    if (genLogic && typeof genLogic === 'function') {
+                        // Generate custom id
+                        genId = genLogic.call({}, this);
+                    }
+                    else {
+                        // Default timestamp
+                        genId = String(Date.now());
+                    }
+                    break;
+                case 'increment':
+                    const incId = this.count() + 1;
+                    genId = String(incId);
+                    break;
+            }
+            return genId;
+        }
+        /**
          * Refer to document
          * @param {string} docid - Document ID
          * @returns {LiteDBDocumentInstance}
          */
-        doc(docid = String(Date.now())) {
-            // Convert numeric value
-            docid = docid.toString();
+        doc(docid) {
+            if (docid) {
+                // External id
+                // Convert numeric value
+                docid = docid.toString();
+            }
+            else {
+                // Manual id
+                docid = this.generateDocumentID();
+            }
             if (docid.includes('-')) {
                 throw new Error("Use '_' character instead of hyphen");
             }
+            const { collid, collname } = this.metadata;
+            const { attachUniqueId } = this.collopt;
             return new LDBDocument(docid, {
-                collid: this.metadata.collid,
-                collname: this.metadata.collname
+                collid,
+                collname,
+                attachUniqueId
             });
         }
         /**
@@ -271,9 +308,11 @@
          * Reference of db collection
          * @static
          * @param {string} collname - Collection name
+         * @param {LiteDBCollectionOptions} - Collection options
+         * @returns {LDBCollection}
          */
-        static collection(collname) {
-            return new LDBCollection(collname);
+        static collection(collname, collopt) {
+            return new LDBCollection(collname, collopt);
         }
         /**
          * Collections entries

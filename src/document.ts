@@ -23,15 +23,12 @@ class LDBDocument extends LDBio implements LiteDBDocumentInstance {
    */
   constructor(docid: string, coll: LDBCollectionMetadata) {
     super()
-    const { collid, collname } = coll
-
     this.name = docid
 
     this.metadata = {
-      collid,
-      collname,
+      ...coll,
       docid,
-      dockey: `${collid}-${docid}` // Combine key
+      dockey: `${coll.collid}-${docid}` // Combine key
     }
   }
 
@@ -65,6 +62,12 @@ class LDBDocument extends LDBio implements LiteDBDocumentInstance {
    * @returns {string} 
    */
   public set(payload: object): string {
+    const { attachUniqueId, docid } = this.metadata
+
+    if (attachUniqueId) {
+      // Assign unique id
+      Reflect.set(payload, attachUniqueId, docid)
+    }
     return this.write(this.metadata.dockey, payload)
   }
   

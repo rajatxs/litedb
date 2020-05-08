@@ -3,6 +3,13 @@
 export interface LDBCollectionMetadata {
   collid: string
   collname: string
+  attachUniqueId?: string
+}
+
+export interface LiteDBCollectionOptions {
+  unique: 'id' | 'increment'
+  generate?(): string
+  attachUniqueId?: string
 }
 
 /** @interface LDBDocumentMetadata */
@@ -11,6 +18,7 @@ export interface LDBDocumentMetadata {
   collname: string
   docid: string
   dockey: string
+  attachUniqueId?: string
 }
 
 /** @interface LiteDBCollectionInstance */
@@ -18,7 +26,7 @@ export interface LiteDBCollectionInstance {
   metadata: LDBCollectionMetadata
   name: string
 
-  doc(docid: string): LiteDBDocumentInstance
+  doc(docid?: string): LiteDBDocumentInstance
 
   removeAll(): Array<string>
 

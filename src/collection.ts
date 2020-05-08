@@ -3,7 +3,8 @@ import { getEntries } from './utils'
 import { 
   LDBCollectionMetadata, 
   LiteDBCollectionInstance, 
-  LiteDBDocumentInstance } from './interfaces'
+  LiteDBDocumentInstance,
+  LiteDBCollectionOptions } from './interfaces'
 
 class LDBCollection implements LiteDBCollectionInstance {
   /**
@@ -20,8 +21,9 @@ class LDBCollection implements LiteDBCollectionInstance {
   /**
    * @constructor
    * @param {string} collname - Collection name
+   * @param {LiteDBCollectionOptions} - Collection options
    */
-  public constructor(collname: string) {
+  public constructor(collname: string, private collopt: LiteDBCollectionOptions = { unique: 'id' }) {
     this.name = collname
 
     this.metadata = {
@@ -31,20 +33,59 @@ class LDBCollection implements LiteDBCollectionInstance {
   }
 
   /**
+   * Generate custom id depends on optional config
+   * @returns {string}
+   */
+  protected generateDocumentID(): string {
+    let genId: string = null
+
+    switch(this.collopt.unique) {
+      case 'id':
+        const genLogic: Function = this.collopt.generate
+
+        if (genLogic && typeof genLogic === 'function') {
+          // Generate custom id
+          genId = genLogic.call({}, this)
+        } else {
+          // Default timestamp
+          genId = String(Date.now())
+        }
+        break
+      case 'increment':
+        const incId: number = this.count() + 1
+        genId = String(incId)
+        break
+    }
+    return genId
+  }
+
+  /**
    * Refer to document
    * @param {string} docid - Document ID
    * @returns {LiteDBDocumentInstance}
    */
-  public doc(docid: string = String(Date.now())): LiteDBDocumentInstance {
-    // Convert numeric value
-    docid = docid.toString()
+  public doc(docid?: string): LiteDBDocumentInstance {
+
+    if (docid) {
+      // External id
+      // Convert numeric value
+      docid = docid.toString()
+    } else {
+      // Manual id
+      docid = this.generateDocumentID()
+    }
 
     if (docid.includes('-')) {
       throw new Error("Use '_' character instead of hyphen")
     }
+
+    const { collid, collname } = this.metadata
+    const { attachUniqueId } = this.collopt
+
     return new LDBDocument(docid, {
-      collid: this.metadata.collid,
-      collname: this.metadata.collname
+      collid,
+      collname,
+      attachUniqueId
     })
   }
 
