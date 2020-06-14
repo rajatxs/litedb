@@ -5,9 +5,18 @@
   "main": "./lib/index.js",
   "preferGlobal": false,
   "scripts": {
-    "build": "tsc && rollup -c"
+    "build": "rollup -c && tsc"
   },
-  "keywords": ["litedb", "lightdb"],
+  "keywords": [
+    "litedb",
+    "lightdb"
+  ],
   "author": "Rajat Sharma <rajat.prototype@gmail.com> (https://github.com/rajatprototype)",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^2.10.0",
+    "rollup-plugin-terser": "^5.3.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "typescript": "^3.9.2"
+  }
 }

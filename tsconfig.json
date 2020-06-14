@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
     "outDir": "./lib",
-    "module": "es6",
+    "lib": [
+      "es2017.string",
+      "es2018.promise",
+      "es2019.array",
+      "es2015",
+      "dom"
+    ],
+    "module": "es2015",
     "allowJs": true,
-    "declaration": true,
-    "target": "ES6",
-    "removeComments": false
+    "target": "es5",
   },
   "include": [
     "./src/**/*"
