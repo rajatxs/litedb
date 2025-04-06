@@ -11,7 +11,7 @@
     "litedb",
     "lightdb"
   ],
-  "author": "Rajat Sharma <rajat.prototype@gmail.com> (https://github.com/rajatprototype)",
+  "author": "Rajat Sharma <rajatxt@proton.me> (https://bitbucket.org/rajatxs)",
   "license": "ISC",
   "devDependencies": {
     "rollup": "^2.10.0",

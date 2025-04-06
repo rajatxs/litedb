@@ -1,6 +1,8 @@
 # Testing only
 temp
 test
+lib
+dist
 
 .vscode
 
